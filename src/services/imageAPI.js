@@ -3,7 +3,5 @@ export const searchApi = (searchQuery, page) => {
   const URL = 'https://pixabay.com/api/?q=';
   return fetch(
     `${URL}${searchQuery}&page=${page}&key=${APIKEY}&image_type=photo&orientation=horizontal&per_page=12`
-  )
-    .then(r => r.json())
-    .then(r => r);
+  ).then(r => r.json());
 };

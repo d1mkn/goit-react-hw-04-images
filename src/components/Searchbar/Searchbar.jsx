@@ -3,7 +3,7 @@ import css from './Searchbar.module.css';
 
 export const Searchbar = ({ onSubmit }) => {
   const handleSubmit = e => {
-    let searchQuery = e.currentTarget.childNodes[1].value;
+    let searchQuery = e.currentTarget.childNodes[1].value.trim();
     e.preventDefault();
     onSubmit(searchQuery);
   };

@@ -24,3 +24,8 @@
 .Button:focus {
   background-color: #303f9f;
 }
+
+.ButtonContainer {
+  margin: 0px auto;
+  height: 40px;
+}

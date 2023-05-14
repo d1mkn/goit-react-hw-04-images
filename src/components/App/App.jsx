@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import { searchApi } from 'services/imageAPI';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
+import { Loader } from 'components/Loader/Loader';
+import { Button } from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
 import css from './App.module.css';
 
@@ -31,13 +33,14 @@ export class App extends Component {
           if (totalHits === 0) {
             this.notify();
             this.setState({ status: 'rejected' });
-          } else {
-            this.setState(prevState => ({
-              images: [...prevState.images, ...hits],
-              totalHits,
-              status: 'resolved',
-            }));
+            return;
           }
+
+          this.setState(prevState => ({
+            images: [...prevState.images, ...hits],
+            showBtn: page < Math.ceil(totalHits / 12),
+            status: 'resolved',
+          }));
         })
         .catch(error => {
           this.setState({ status: 'rejected', error });
@@ -75,6 +78,7 @@ export class App extends Component {
       images: [],
       totalHits: null,
       error: null,
+      showBtn: false,
       modalImg: '',
       modalTags: '',
       showModal: false,
@@ -96,18 +100,19 @@ export class App extends Component {
   };
 
   render() {
-    const { modalImg, modalTags, showModal, status, images } = this.state;
+    const { modalImg, modalTags, showModal, showBtn, status, images } =
+      this.state;
 
     return (
       <main className={css.App}>
         <Searchbar onSubmit={this.handleSubmit} />
         <ToastContainer />
+        {status === 'pending' && <Loader/>}
         <ImageGallery
           images={images}
-          onLoadMore={this.handleLoadMore}
           dataForModal={this.handleImgClick}
-          status={status}
         />
+        {showBtn && <Button onClick={this.handleLoadMore} />}
         {showModal && (
           <Modal url={modalImg} tags={modalTags} onClose={this.toggleModal} />
         )}

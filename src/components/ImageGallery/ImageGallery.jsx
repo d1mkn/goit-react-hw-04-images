@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Loader } from 'components/Loader/Loader';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
@@ -31,9 +30,7 @@ export const ImageGallery = ({ images, status, onLoadMore, dataForModal }) => {
           ))}
       </ul>
       <div className={css.ButtonContainer}>
-        {images && status === 'resolved' && (
-          <Button onClick={handleLoadMore} />
-        )}
+        {images && status === 'resolved' && <Button onClick={handleLoadMore} />}
       </div>
     </>
   );

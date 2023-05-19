@@ -4,6 +4,12 @@ import css from './Modal.module.css';
 
 export const Modal = ({ url, tags, onClose }) => {
   useEffect(() => {
+    const clickEsc = event => {
+      if (event.code === 'Escape') {
+        onClose();
+      }
+    };
+
     window.addEventListener('keydown', clickEsc);
     document.documentElement.style.overflow = 'hidden';
 
@@ -11,16 +17,10 @@ export const Modal = ({ url, tags, onClose }) => {
       window.removeEventListener('keydown', clickEsc);
       document.documentElement.style.overflow = 'auto';
     };
-  });
+  }, [onClose]);
 
   const clickBackdrop = event => {
     if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
-
-  const clickEsc = event => {
-    if (event.code === 'Escape') {
       onClose();
     }
   };

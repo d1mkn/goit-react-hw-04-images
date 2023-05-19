@@ -27,14 +27,14 @@ export const App = () => {
     setStatus('pending');
 
     searchApi(query, page)
-      .then(r => {
-        if (r.totalHits === 0) {
+      .then(data => {
+        if (data.totalHits === 0) {
           notify();
           setStatus('rejected');
           return;
         }
 
-        setImages(prevImages => [...prevImages, ...r.hits]);
+        setImages(prevImages => [...prevImages, ...data.hits]);
         setStatus('resolved');
       })
       .catch(error => {
@@ -59,7 +59,7 @@ export const App = () => {
   };
 
   const handleLoadMore = () => {
-    setPage(page + 1);
+    setPage(prevState => prevState + 1);
   };
 
   const toggleModal = () => {

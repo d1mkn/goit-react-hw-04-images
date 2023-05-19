@@ -13,8 +13,6 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [images, setImages] = useState([]);
-  const [totalHits, setTotalHits] = useState(null);
-  const [showBtn, setShowBtn] = useState(false);
   const [error, setError] = useState(null);
   const [modalImg, setModalImg] = useState('');
   const [modalTags, setModalTags] = useState('');
@@ -29,15 +27,14 @@ export const App = () => {
     setStatus('pending');
 
     searchApi(query, page)
-      .then(({ hits, totalHits }) => {
-        if (totalHits === 0) {
+      .then(r => {
+        if (r.totalHits === 0) {
           notify();
           setStatus('rejected');
           return;
         }
 
-        setImages([...images, ...hits]);
-        setShowBtn(page < Math.ceil(totalHits / 12));
+        setImages(prevImages => [...prevImages, ...r.hits]);
         setStatus('resolved');
       })
       .catch(error => {
@@ -73,9 +70,7 @@ export const App = () => {
     setQuery('');
     setPage(1);
     setImages([]);
-    setTotalHits(null);
     setError(null);
-    setShowBtn(false);
     setModalImg('');
     setModalTags('');
     setShowModal(false);
@@ -101,7 +96,9 @@ export const App = () => {
       <ToastContainer />
       {status === 'pending' && <Loader />}
       <ImageGallery images={images} dataForModal={handleImgClick} />
-      {showBtn && <Button onClick={handleLoadMore} />}
+      {images.length && images.length % 12 === 0 && !error && (
+        <Button onClick={handleLoadMore} />
+      )}
       {showModal && (
         <Modal url={modalImg} tags={modalTags} onClose={toggleModal} />
       )}

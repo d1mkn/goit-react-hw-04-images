@@ -11,7 +11,7 @@ export const Modal = ({ url, tags, onClose }) => {
       window.removeEventListener('keydown', clickEsc);
       document.documentElement.style.overflow = 'auto';
     };
-  }, []);
+  });
 
   const clickBackdrop = event => {
     if (event.target === event.currentTarget) {
